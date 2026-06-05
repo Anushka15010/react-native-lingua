@@ -1,0 +1,117 @@
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/preflight.css" layer(base);
+@import "tailwindcss/utilities.css";
+
+@import "nativewind/theme";
+
+@theme {
+  --color-lingua-purple: #6C4EF5;
+  --color-lingua-deep-purple: #5B3BF6;
+  --color-lingua-blue: #4D8BFF;
+  --color-lingua-green: #21C16B;
+
+  --color-success: #21C16B;
+  --color-warning: #FFC800;
+  --color-streak: #FF8A00;
+  --color-error: #FF4D4F;
+  --color-info: #4D8BFF;
+
+  --color-text-primary: #0D132B;
+  --color-text-secondary: #6B7280;
+  --color-border: #E5E7EB;
+  --color-surface: #F6F7FB;
+  --color-background: #FFFFFF;
+
+  --font-poppins: "Poppins-Regular";
+  --font-poppins-medium: "Poppins-Medium";
+  --font-poppins-semibold: "Poppins-SemiBold";
+  --font-poppins-bold: "Poppins-Bold";
+
+  --radius-lingua-sm: 8px;
+  --radius-lingua-md: 12px;
+  --radius-lingua-lg: 16px;
+  --radius-lingua-xl: 24px;
+
+  --spacing-lingua-screen: 24px;
+  --spacing-lingua-card: 20px;
+}
+
+@layer base {
+  * {
+    font-family: var(--font-poppins);
+  }
+}
+
+@layer utilities {
+  .ds-screen {
+    @apply flex-1 bg-background px-lingua-screen;
+  }
+
+  .ds-section {
+    @apply gap-4;
+  }
+
+  .ds-card {
+    @apply rounded-lingua-lg border border-border bg-background p-lingua-card;
+  }
+
+  .ds-card--soft {
+    @apply rounded-lingua-lg border border-border bg-surface p-lingua-card;
+  }
+
+  .ds-button {
+    @apply min-h-14 flex-row items-center justify-center rounded-lingua-md px-5;
+  }
+
+  .ds-button--primary {
+    @apply bg-lingua-purple;
+  }
+
+  .ds-button--success {
+    @apply bg-success;
+  }
+
+  .ds-pill {
+    @apply min-h-10 flex-row items-center justify-center rounded-full px-4;
+  }
+
+  .ds-progress-track {
+    @apply h-3 overflow-hidden rounded-full bg-border;
+  }
+
+  .ds-progress-fill {
+    @apply h-full rounded-full bg-lingua-green;
+  }
+
+  .h1 {
+    @apply font-poppins-bold text-[32px] leading-[38px] text-text-primary;
+  }
+
+  .h2 {
+    @apply font-poppins-semibold text-[24px] leading-[31px] text-text-primary;
+  }
+
+  .h3 {
+    @apply font-poppins-semibold text-[20px] leading-[26px] text-text-primary;
+  }
+
+  .h4 {
+    @apply font-poppins-medium text-[16px] leading-[22px] text-text-primary;
+  }
+
+  .body-lg {
+    @apply font-poppins text-[16px] leading-[26px] text-text-primary;
+  }
+
+  .body {
+    @apply font-poppins text-[14px] leading-[22px] text-text-primary;
+  }
+
+  .body-sm {
+    @apply font-poppins text-[13px] leading-[21px] text-text-secondary;
+  }
+
+  .caption {
+    @apply font-poppins text-[11px] leading-[15px] text-text-secondary;
+  }
+}
