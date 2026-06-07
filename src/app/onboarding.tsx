@@ -1,82 +1,93 @@
 ﻿import { useRouter } from "expo-router";
 import React from "react";
 import {
-  Dimensions,
   Image,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
+  useWindowDimensions,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const mascotLogo = require("../assets/images/moscot-logo.png");
 const mascotWelcome = require("../assets/images/mascot-welcome.png");
 
-const SCREEN_WIDTH = Dimensions.get("window").width;
-const MAX_WIDTH = 430;
-
 export default function OnboardingScreen() {
   const router = useRouter();
+  const { width, height } = useWindowDimensions();
+
+  const mascotSize = width * 0.35;
+  const headingSize = width < 600 ? 36 : width < 900 ? 48 : 56;
+  const subtitleSize = width < 600 ? 16 : 18;
+  const logoTextSize = width < 600 ? 24 : 30;
+  const logoImageSize = width < 600 ? 40 : 52;
+  const bubbleFontSize = width < 600 ? 15 : 18;
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <View style={styles.centerWrapper}>
-        <ScrollView
-          contentContainerStyle={styles.scrollContent}
-          showsVerticalScrollIndicator={false}
-          style={styles.scroll}
-        >
-          <View style={styles.logoRow}>
-            <Image
-              source={mascotLogo}
-              style={styles.logoImage}
-              resizeMode="contain"
-            />
-            <Text style={styles.logoText}>lingua</Text>
-          </View>
+      <ScrollView
+        contentContainerStyle={[styles.scrollContent, { minHeight: height }]}
+        showsVerticalScrollIndicator={false}
+      >
+        {/* Top Logo Row */}
+        <View style={styles.logoRow}>
+          <Image
+            source={mascotLogo}
+            style={{ width: logoImageSize, height: logoImageSize, marginRight: 10 }}
+            resizeMode="contain"
+          />
+          <Text style={[styles.logoText, { fontSize: logoTextSize }]}>lingua</Text>
+        </View>
 
-          <View style={styles.headingContainer}>
-            <Text style={styles.headingDark}>Your AI language </Text>
-            <Text style={styles.headingPurple}>teacher.</Text>
-          </View>
+        {/* Heading */}
+        <View style={styles.headingContainer}>
+          <Text style={[styles.headingDark, { fontSize: headingSize, lineHeight: headingSize * 1.2 }]}>
+            Your AI language{" "}
+          </Text>
+          <Text style={[styles.headingPurple, { fontSize: headingSize, lineHeight: headingSize * 1.2 }]}>
+            teacher.
+          </Text>
+        </View>
 
-          <View style={styles.subtitleContainer}>
-            <Text style={styles.subtitle}>
-              Real conversations, personalized{"\n"}lessons, anytime, anywhere.
-            </Text>
-          </View>
+        {/* Subtitle */}
+        <View style={styles.subtitleContainer}>
+          <Text style={[styles.subtitle, { fontSize: subtitleSize }]}>
+            Real conversations, personalized lessons, anytime, anywhere.
+          </Text>
+        </View>
 
-          <View style={styles.mascotContainer}>
-            <View style={[styles.bubble, styles.bubbleHello]}>
-              <Text style={styles.bubbleTextDark}>Hello!</Text>
-            </View>
-            <View style={[styles.bubble, styles.bubbleHola]}>
-              <Text style={styles.bubbleTextPurple}>Hola!</Text>
-            </View>
-            <View style={[styles.bubble, styles.bubbleChinese]}>
-              <Text style={styles.bubbleTextRed}>你好!</Text>
-            </View>
-            <Image
-              source={mascotWelcome}
-              style={styles.mascotImage}
-              resizeMode="contain"
-            />
+        {/* Mascot + Speech Bubbles */}
+        <View style={[styles.mascotContainer, { height: mascotSize * 1.4 }]}>
+          <View style={[styles.bubble, styles.bubbleHello]}>
+            <Text style={[styles.bubbleTextDark, { fontSize: bubbleFontSize }]}>Hello!</Text>
           </View>
-        </ScrollView>
+          <View style={[styles.bubble, styles.bubbleHola]}>
+            <Text style={[styles.bubbleTextPurple, { fontSize: bubbleFontSize }]}>¡Hola!</Text>
+          </View>
+          <View style={[styles.bubble, styles.bubbleChinese]}>
+            <Text style={[styles.bubbleTextRed, { fontSize: bubbleFontSize }]}>你好!</Text>
+          </View>
+          <Image
+            source={mascotWelcome}
+            style={{ width: mascotSize, height: mascotSize * 1.1 }}
+            resizeMode="contain"
+          />
+        </View>
 
+        {/* Get Started Button */}
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={styles.button}
-            onPress={() => router.push("/")}
+            onPress={() => router.push("/auth/sign-up")}
             activeOpacity={0.85}
           >
             <Text style={styles.buttonText}>Get Started</Text>
             <Text style={styles.buttonArrow}>›</Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }
@@ -84,75 +95,49 @@ export default function OnboardingScreen() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: "#f5f5f5",
-    alignItems: "center",
-  },
-  centerWrapper: {
-    flex: 1,
-    width: "100%",
-    maxWidth: MAX_WIDTH,
     backgroundColor: "#ffffff",
-    alignSelf: "center",
-  },
-  scroll: {
-    flex: 1,
   },
   scrollContent: {
     flexGrow: 1,
-    paddingBottom: 20,
+    paddingBottom: 40,
   },
   logoRow: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 24,
-    marginBottom: 32,
-  },
-  logoImage: {
-    width: 40,
-    height: 40,
-    marginRight: 8,
+    marginTop: 32,
+    marginBottom: 40,
   },
   logoText: {
-    fontSize: 24,
     fontWeight: "700",
     color: "#111827",
   },
   headingContainer: {
-    paddingHorizontal: 32,
-    marginBottom: 12,
+    paddingHorizontal: "8%",
+    marginBottom: 16,
   },
   headingDark: {
-    fontSize: 36,
     fontWeight: "800",
     color: "#111827",
-    lineHeight: 44,
   },
   headingPurple: {
-    fontSize: 36,
     fontWeight: "800",
     color: "#5b21b6",
-    lineHeight: 44,
   },
   subtitleContainer: {
-    paddingHorizontal: 32,
-    marginBottom: 24,
+    paddingHorizontal: "8%",
+    marginBottom: 32,
   },
   subtitle: {
-    fontSize: 16,
     color: "#6b7280",
-    lineHeight: 24,
+    lineHeight: 26,
   },
   mascotContainer: {
     position: "relative",
     alignItems: "center",
     justifyContent: "center",
-    height: 320,
-    marginHorizontal: 16,
-  },
-  mascotImage: {
-    width: 260,
-    height: 270,
+    marginHorizontal: "5%",
+    marginBottom: 32,
   },
   bubble: {
     position: "absolute",
@@ -167,46 +152,42 @@ const styles = StyleSheet.create({
   },
   bubbleHello: {
     backgroundColor: "#f0f4ff",
-    top: 40,
-    left: 16,
+    top: "15%",
+    left: "8%",
     zIndex: 10,
   },
   bubbleHola: {
     backgroundColor: "#eeeaff",
-    top: 10,
-    right: 16,
+    top: "5%",
+    right: "8%",
     zIndex: 10,
   },
   bubbleChinese: {
     backgroundColor: "#fff0f0",
-    top: 120,
-    right: 10,
+    top: "45%",
+    right: "6%",
     zIndex: 10,
   },
   bubbleTextDark: {
-    fontSize: 15,
     fontWeight: "600",
     color: "#1a1a2e",
   },
   bubbleTextPurple: {
-    fontSize: 15,
     fontWeight: "600",
     color: "#5b21b6",
   },
   bubbleTextRed: {
-    fontSize: 15,
     fontWeight: "600",
     color: "#dc2626",
   },
   buttonContainer: {
-    paddingHorizontal: 24,
+    paddingHorizontal: "8%",
     paddingBottom: 32,
-    paddingTop: 8,
   },
   button: {
     backgroundColor: "#5b21b6",
     borderRadius: 18,
-    paddingVertical: 18,
+    paddingVertical: 20,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
