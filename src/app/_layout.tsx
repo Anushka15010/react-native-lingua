@@ -24,11 +24,7 @@ function AuthGate() {
     const inAuthGroup = segments[0] === "auth";
     const inOnboarding = segments[0] === "onboarding";
 
-    if (!isSignedIn) {
-      if (!inAuthGroup && !inOnboarding) {
-        router.replace("/onboarding");
-      }
-    } else {
+    if (isSignedIn) {
       if (inAuthGroup || inOnboarding) {
         router.replace("/");
       }

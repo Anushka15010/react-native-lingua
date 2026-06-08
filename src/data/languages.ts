@@ -1,0 +1,58 @@
+import { Language } from "../types/learning";
+
+export const languages: Language[] = [
+  {
+    id: "es",
+    name: "Spanish",
+    nativeName: "Español",
+    flagEmoji: "🇪🇸",
+    mascotGreeting: "¡Hola! Let's start our Spanish journey today!",
+    themeColor: "#FF9F1C",
+    learnerCount: "28.4M learners",
+  },
+  {
+    id: "fr",
+    name: "French",
+    nativeName: "Français",
+    flagEmoji: "🇫🇷",
+    mascotGreeting: "Bonjour! Let's learn French together!",
+    themeColor: "#4A90E2",
+    learnerCount: "19.4M learners",
+  },
+  {
+    id: "ja",
+    name: "Japanese",
+    nativeName: "日本語",
+    flagEmoji: "🇯🇵",
+    mascotGreeting: "こんにちは! Ready to speak Japanese?",
+    themeColor: "#FF4D4F",
+    learnerCount: "12.7M learners",
+  },
+  {
+    id: "ko",
+    name: "Korean",
+    nativeName: "한국어",
+    flagEmoji: "🇰🇷",
+    mascotGreeting: "안녕하세요! Let's learn Korean!",
+    themeColor: "#4D8BFF",
+    learnerCount: "9.3M learners",
+  },
+  {
+    id: "de",
+    name: "German",
+    nativeName: "Deutsch",
+    flagEmoji: "🇩🇪",
+    mascotGreeting: "Hallo! Let's start learning German!",
+    themeColor: "#FFC800",
+    learnerCount: "8.1M learners",
+  },
+  {
+    id: "zh",
+    name: "Chinese",
+    nativeName: "中文",
+    flagEmoji: "🇨🇳",
+    mascotGreeting: "你好! Let's dive into Chinese language and culture!",
+    themeColor: "#FF5E5B",
+    learnerCount: "7.4M learners",
+  },
+];
