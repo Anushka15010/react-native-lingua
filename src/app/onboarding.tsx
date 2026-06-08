@@ -1,4 +1,4 @@
-﻿import { useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import React from "react";
 import {
   Image,
@@ -10,6 +10,7 @@ import {
   useWindowDimensions,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { Ionicons } from "@expo/vector-icons";
 
 const mascotLogo = require("../assets/images/moscot-logo.png");
 const mascotWelcome = require("../assets/images/mascot-welcome.png");
@@ -76,6 +77,14 @@ export default function OnboardingScreen() {
           />
         </View>
 
+        {/* Pagination Indicators */}
+        <View style={styles.indicatorContainer}>
+          <View style={[styles.dot, styles.activeDot]} />
+          <View style={styles.dot} />
+          <View style={styles.dot} />
+          <View style={styles.dot} />
+        </View>
+
         {/* Get Started Button */}
         <View style={styles.buttonContainer}>
           <TouchableOpacity
@@ -84,7 +93,7 @@ export default function OnboardingScreen() {
             activeOpacity={0.85}
           >
             <Text style={styles.buttonText}>Get Started</Text>
-            <Text style={styles.buttonArrow}>›</Text>
+            <Ionicons name="chevron-forward" size={20} color="#ffffff" style={{ marginLeft: 8 }} />
           </TouchableOpacity>
         </View>
       </ScrollView>
@@ -119,10 +128,12 @@ const styles = StyleSheet.create({
   headingDark: {
     fontWeight: "800",
     color: "#111827",
+    textAlign: "center",
   },
   headingPurple: {
     fontWeight: "800",
-    color: "#5b21b6",
+    color: "#6B4EFF",
+    textAlign: "center",
   },
   subtitleContainer: {
     paddingHorizontal: "8%",
@@ -131,6 +142,7 @@ const styles = StyleSheet.create({
   subtitle: {
     color: "#6b7280",
     lineHeight: 26,
+    textAlign: "center",
   },
   mascotContainer: {
     position: "relative",
@@ -174,7 +186,7 @@ const styles = StyleSheet.create({
   },
   bubbleTextPurple: {
     fontWeight: "600",
-    color: "#5b21b6",
+    color: "#6B4EFF",
   },
   bubbleTextRed: {
     fontWeight: "600",
@@ -185,17 +197,17 @@ const styles = StyleSheet.create({
     paddingBottom: 32,
   },
   button: {
-    backgroundColor: "#5b21b6",
-    borderRadius: 18,
-    paddingVertical: 20,
+    backgroundColor: "#6B4EFF",
+    borderRadius: 20,
+    paddingVertical: 18,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    shadowColor: "#5b21b6",
+    shadowColor: "#6B4EFF",
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
+    shadowOpacity: 0.2,
     shadowRadius: 8,
-    elevation: 6,
+    elevation: 4,
   },
   buttonText: {
     color: "#ffffff",
@@ -203,11 +215,20 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     letterSpacing: 0.3,
   },
-  buttonArrow: {
-    color: "#ffffff",
-    fontSize: 22,
-    fontWeight: "700",
-    marginLeft: 10,
-    lineHeight: 24,
+  indicatorContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 36,
+  },
+  dot: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    backgroundColor: "#E2E8F0",
+    marginHorizontal: 5,
+  },
+  activeDot: {
+    backgroundColor: "#6B4EFF",
   },
 });

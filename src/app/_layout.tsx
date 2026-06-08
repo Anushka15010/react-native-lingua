@@ -1,11 +1,48 @@
-import { Stack } from "expo-router";
+import { ClerkProvider, useAuth } from "@clerk/expo";
+import { tokenCache } from "@clerk/expo/token-cache";
+import { Slot, useRouter, useSegments } from "expo-router";
+import { useEffect } from "react";
 
-export default function Layout() {
+const publishableKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY!;
+
+if (!publishableKey) {
+  throw new Error("Add EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY to your .env file");
+}
+
+// ─── Auth Gate ────────────────────────────────────────────────────────────────
+// Redirects users based on their auth state:
+//   - Signed out → /onboarding
+//   - Signed in  → / (home)
+function AuthGate() {
+  const { isSignedIn, isLoaded } = useAuth();
+  const segments = useSegments();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!isLoaded) return;
+
+    const inAuthGroup = segments[0] === "auth";
+    const inOnboarding = segments[0] === "onboarding";
+
+    if (!isSignedIn) {
+      if (!inAuthGroup && !inOnboarding) {
+        router.replace("/onboarding");
+      }
+    } else {
+      if (inAuthGroup || inOnboarding) {
+        router.replace("/");
+      }
+    }
+  }, [isSignedIn, isLoaded, segments, router]);
+
+  return <Slot />;
+}
+
+// ─── Root Layout ──────────────────────────────────────────────────────────────
+export default function RootLayout() {
   return (
-    <Stack>
-      <Stack.Screen name="index" options={{ headerShown: false }} />
-      <Stack.Screen name="onboarding" options={{ headerShown: false }} />
-      <Stack.Screen name="auth" options={{ headerShown: false }} />
-    </Stack>
+    <ClerkProvider publishableKey={publishableKey} tokenCache={tokenCache}>
+      <AuthGate />
+    </ClerkProvider>
   );
 }
