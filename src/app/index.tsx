@@ -9,7 +9,7 @@ import { languages } from "../data/languages";
 export default function Index() {
   const router = useRouter();
   const { signOut, isSignedIn } = useAuth();
-  const { selectedLanguageId } = useAppStore();
+  const { selectedLanguageId, setSelectedLanguageId } = useAppStore();
 
   const currentLanguage = languages.find((lang) => lang.id === selectedLanguageId);
 
@@ -18,6 +18,10 @@ export default function Index() {
       await signOut();
     }
     router.replace("/onboarding");
+  };
+
+  const handleResetLanguage = () => {
+    setSelectedLanguageId(null);
   };
 
   return (
@@ -47,11 +51,19 @@ export default function Index() {
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={styles.link}
+          style={styles.resetBtn}
+          onPress={handleResetLanguage}
+          activeOpacity={0.7}
+        >
+          <Text style={styles.linkText}>Reset Language State 🔄</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.onboardingBtn}
           onPress={handleGoToOnboarding}
           activeOpacity={0.7}
         >
-          <Text style={styles.linkText}>Go to Onboarding (Sign Out) →</Text>
+          <Text style={styles.linkText}>Go to Onboarding Screen 🚀</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -72,7 +84,16 @@ const styles = StyleSheet.create({
     width: "80%",
     alignItems: "center",
   },
-  link: {
+  resetBtn: {
+    marginTop: 12,
+    paddingVertical: 14,
+    paddingHorizontal: 32,
+    backgroundColor: "#EF4444",
+    borderRadius: 14,
+    width: "80%",
+    alignItems: "center",
+  },
+  onboardingBtn: {
     marginTop: 12,
     paddingVertical: 14,
     paddingHorizontal: 32,
