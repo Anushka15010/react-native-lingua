@@ -1,4 +1,4 @@
-import { useAuth, useUser } from "@/lib/mockClerk";
+import { useAuth, useUser } from "../../lib/mockClerk";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Link, useRouter } from "expo-router";
 import { SymbolView } from "expo-symbols";

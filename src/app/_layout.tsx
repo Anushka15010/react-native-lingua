@@ -6,7 +6,7 @@ import { Slot, useRouter, useSegments } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
 import * as SystemUI from "expo-system-ui";
-import { ClerkProvider, ClerkLoaded, useAuth, tokenCache } from "@/lib/mockClerk";
+import { ClerkProvider, ClerkLoaded, useAuth, tokenCache } from "../lib/mockClerk";
 import { PostHogProvider, usePostHog } from "posthog-react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 

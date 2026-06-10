@@ -1,7 +1,7 @@
 import VerificationModal from "@/components/VerificationModal";
 import { images } from "@/constants/images";
 import { useWarmUpBrowser } from "@/hooks/useWarmUpBrowser";
-import { useSignIn } from "@/lib/mockClerk";
+import { useSignIn } from "../lib/mockClerk";
 import { useAppOAuth as useOAuth } from "@/hooks/useAppOAuth";
 import { Link, useRouter } from "expo-router";
 import * as WebBrowser from "expo-web-browser";

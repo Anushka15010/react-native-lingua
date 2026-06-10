@@ -1,167 +1,122 @@
-import React, { createContext, useContext, useState } from "react";
+import React from "react";
+import {
+  useSignIn as useClerkSignIn,
+  useSignUp as useClerkSignUp,
+  useAuth as useClerkAuth,
+  useUser as useClerkUser,
+  useOAuth as useClerkOAuth,
+  useClerk,
+  ClerkProvider as ClerkProviderReal,
+  ClerkLoaded as ClerkLoadedReal,
+} from "@clerk/expo";
+import * as SecureStore from "expo-secure-store";
 
-// Mock tokenCache
+// Real tokenCache using expo-secure-store
 export const tokenCache = {
-  getToken: async (key: string) => "",
-  saveToken: async (key: string, value: string) => {},
+  async getToken(key: string) {
+    try {
+      const item = await SecureStore.getItemAsync(key);
+      if (item) {
+        console.log(`${key} was used 🔐 \n`);
+      } else {
+        console.log("No values stored under key: " + key);
+      }
+      return item;
+    } catch (error) {
+      console.error("SecureStore get item error: ", error);
+      await SecureStore.deleteItemAsync(key);
+      return null;
+    }
+  },
+  async saveToken(key: string, value: string) {
+    try {
+      return SecureStore.setItemAsync(key, value);
+    } catch (err) {
+      return;
+    }
+  },
 };
 
-const AuthContext = createContext<any>(null);
-
-export function ClerkProvider({ children, ...props }: { children: React.ReactNode; [key: string]: any }) {
-  const [isSignedIn, setIsSignedIn] = useState(false);
-  const [session, setSession] = useState<string | null>(null);
-
+// Re-export standard Clerk Provider & Loader
+export function ClerkProvider({ children, publishableKey, tokenCache, ...props }: any) {
   return (
-    <AuthContext.Provider value={{ isSignedIn, setIsSignedIn, session, setSession }}>
+    <ClerkProviderReal publishableKey={publishableKey} tokenCache={tokenCache} {...props}>
       {children}
-    </AuthContext.Provider>
+    </ClerkProviderReal>
   );
 }
 
-export function ClerkLoaded({ children }: { children: React.ReactNode }) {
-  return <>{children}</>;
-}
+export const ClerkLoaded = ClerkLoadedReal;
 
+// Wrapped useAuth hook
 export function useAuth() {
-  const context = useContext(AuthContext);
+  const { isLoaded, isSignedIn, userId, signOut } = useClerkAuth();
   return {
-    isLoaded: true,
-    isSignedIn: context ? context.isSignedIn : false,
-    userId: context && context.isSignedIn ? "mock_user_123" : null,
-    signOut: async () => {
-      if (context) {
-        context.setIsSignedIn(false);
-        context.setSession(null);
-      }
-    },
+    isLoaded,
+    isSignedIn,
+    userId,
+    signOut,
   };
 }
 
+// Wrapped useUser hook
 export function useUser() {
-  const context = useContext(AuthContext);
+  const { isLoaded, isSignedIn, user } = useClerkUser();
   return {
-    isLoaded: true,
-    isSignedIn: context ? context.isSignedIn : false,
-    user: context && context.isSignedIn ? {
-      id: "mock_user_123",
-      firstName: "Jane",
-      lastName: "Doe",
-      fullName: "Jane Doe",
-      imageUrl: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&q=80",
-      emailAddresses: [{ emailAddress: "jane.doe@example.com" }],
-    } : null,
+    isLoaded,
+    isSignedIn,
+    user,
   };
 }
 
+// Wrapped useSignIn hook
 export function useSignIn() {
-  const context = useContext(AuthContext);
-  
-  const mockSignIn: any = {
-    status: "complete",
-    createdSessionId: "sess_123",
-    firstFactorVerification: {
-      status: "complete",
-      externalVerificationRedirectURL: "http://localhost:8085/oauth-native-callback?rotating_token_nonce=mock_nonce",
-    },
-    emailCode: {
-      sendCode: async (args: any): Promise<{ error: any }> => {
-        return { error: null };
-      },
-      verifyCode: async (args: any): Promise<{ error: any }> => {
-        return { error: null };
-      },
-    },
-    finalize: async (args: any) => {
-      if (context) {
-        context.setIsSignedIn(true);
-        context.setSession("sess_123");
-      }
-      if (args && args.navigate) {
-        args.navigate();
-      }
-    },
-    create: async (args: any): Promise<{ error: any }> => {
-      return { error: null };
-    },
-    reload: async (args: any): Promise<{ error: any }> => {
-      return { error: null };
-    },
-  };
+  const { signIn, fetchStatus } = useClerkSignIn();
+  const { setActive } = useClerk();
 
-  return {
-    signIn: mockSignIn,
-    fetchStatus: "loaded" as any,
-    isLoaded: true,
-    setActive: async (args: any) => {
-      if (context) {
-        context.setIsSignedIn(true);
-        context.setSession(args.session);
-      }
-    },
-  };
-}
-
-export function useSignUp() {
-  const context = useContext(AuthContext);
-
-  const mockSignUp: any = {
-    status: "complete",
-    createdSessionId: "sess_123",
-    firstFactorVerification: {
-      status: "complete",
-    },
-    password: async (args: any): Promise<{ error: any }> => {
-      return { error: null };
-    },
-    verifications: {
-      sendEmailCode: async (): Promise<{ error: any }> => {
-        return { error: null };
-      },
-      verifyEmailCode: async (args: any): Promise<{ error: any }> => {
-        return { error: null };
-      },
-    },
-    finalize: async (args: any) => {
-      if (context) {
-        context.setIsSignedIn(true);
-        context.setSession("sess_123");
-      }
-      if (args && args.navigate) {
-        args.navigate();
-      }
-    },
-    create: async (args: any): Promise<{ error: any }> => {
-      return { error: null };
-    },
-  };
-
-  return {
-    signUp: mockSignUp,
-    fetchStatus: "loaded" as any,
-    isLoaded: true,
-    setActive: async (args: any) => {
-      if (context) {
-        context.setIsSignedIn(true);
-        context.setSession(args.session);
-      }
-    },
-  };
-}
-
-export function useOAuth(options: any) {
-  const context = useContext(AuthContext);
-  return {
-    startOAuthFlow: async () => {
-      return {
-        createdSessionId: "sess_123",
-        setActive: (args: any) => {
-          if (context) {
-            context.setIsSignedIn(true);
-            context.setSession(args.session);
+  const wrappedSignIn = signIn ? new Proxy(signIn, {
+    get(target, prop) {
+      if (prop === "reload") {
+        return async (args: any) => {
+          if (typeof (target as any).reload === "function") {
+            return await (target as any).reload.bind(target)(args);
           }
-        },
-      };
-    },
+          return { error: null };
+        };
+      }
+      const value = Reflect.get(target, prop);
+      if (typeof value === "function") {
+        return value.bind(target);
+      }
+      return value;
+    }
+  }) : null;
+
+  return {
+    signIn: wrappedSignIn as any,
+    fetchStatus,
+    isLoaded: true,
+    setActive,
+  };
+}
+
+// Wrapped useSignUp hook
+export function useSignUp() {
+  const { signUp, fetchStatus } = useClerkSignUp();
+  const { setActive } = useClerk();
+
+  return {
+    signUp,
+    fetchStatus,
+    isLoaded: true,
+    setActive,
+  };
+}
+
+// Wrapped useOAuth hook
+export function useOAuth(options: any) {
+  const { startOAuthFlow } = useClerkOAuth(options);
+  return {
+    startOAuthFlow,
   };
 }

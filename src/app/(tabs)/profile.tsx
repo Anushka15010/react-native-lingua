@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, SafeAreaView, StyleSheet, Image, TouchableOpacity } from "react-native";
-import { useAuth, useUser } from "@/lib/mockClerk";
+import { useAuth, useUser } from "../../lib/mockClerk";
 
 export default function ProfileScreen() {
   const { signOut } = useAuth();

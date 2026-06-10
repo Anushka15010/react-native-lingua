@@ -1,4 +1,4 @@
-import { useOAuth, useSignIn, useSignUp } from "@/lib/mockClerk";
+import { useOAuth, useSignIn, useSignUp } from "../lib/mockClerk";
 import { useCallback } from "react";
 import { Platform } from "react-native";
 
