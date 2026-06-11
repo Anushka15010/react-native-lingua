@@ -49,8 +49,15 @@ export default function SignUp() {
       } else {
         // Handle next steps such as MFA
       }
-    } catch (err) {
-      console.error("OAuth error", err);
+    } catch (err: any) {
+      const isCancelled = err?.message === "Flow cancelled by user" || 
+                          err?.message?.toLowerCase().includes("cancelled") || 
+                          err?.message?.toLowerCase().includes("canceled");
+      if (isCancelled) {
+        console.log("OAuth flow cancelled by user");
+      } else {
+        console.error("OAuth error", err);
+      }
     }
   }, [startGoogleOAuthFlow, startFacebookOAuthFlow, startAppleOAuthFlow]);
 
